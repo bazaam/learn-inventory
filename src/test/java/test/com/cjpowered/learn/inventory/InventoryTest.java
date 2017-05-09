@@ -50,7 +50,7 @@ public class InventoryTest {
     	// given
         final int onHand = 7;
         final int need = 12;
-        final StockedItem item = new StockedItem(12);
+        final StockedItem item = new StockedItem(need);
     	final LocalDate today = LocalDate.now();
     	final InventoryDatabase db = new DatabaseTemplate(){
     		@Override
@@ -81,7 +81,7 @@ public class InventoryTest {
     	// given
         final int onHand = 18;
         final int need = 29;
-        final StockedItem item = new StockedItem(29);
+        final StockedItem item = new StockedItem(need);
     	final LocalDate today = LocalDate.now();
     	final InventoryDatabase db = new DatabaseTemplate(){
     		@Override
