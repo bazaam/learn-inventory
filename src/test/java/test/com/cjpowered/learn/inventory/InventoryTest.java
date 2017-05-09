@@ -107,9 +107,7 @@ public class InventoryTest {
     	
     	// then
     	assertEquals(2, actual.size());
-    	assertEquals(needItem1 - onHandItem1, actual.get(0).quantity);
-    	assertEquals(needItem2 - onHandItem2, actual.get(1).quantity);
-    	assertEquals(item1, actual.get(0).item);
-    	assertEquals(item2, actual.get(1).item);
+    	assertEquals(new Order(item1, needItem1 - onHandItem1), actual.get(0));
+    	assertEquals(new Order(item2, needItem2 - onHandItem2), actual.get(0));
     }
 }
