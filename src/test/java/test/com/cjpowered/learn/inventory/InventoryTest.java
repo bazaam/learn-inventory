@@ -106,4 +106,33 @@ public class InventoryTest {
         assertEquals(need - onHand, actual.get(0).quantity);
               
     }
+    
+    @Test
+    public void whenOverstockedDoNotOrder()   {
+    	// given
+        final int onHand = 26;
+        final int need = 5;
+        final StockedItem item = new StockedItem(need);
+    	final LocalDate today = LocalDate.now();
+    	final InventoryDatabase db = new DatabaseTemplate(){
+    		@Override
+    		public List<Item> stockItems() {
+    			// TODO Auto-generated method stub
+    		return Collections.singletonList(item);
+    		}
+    		@Override
+    		public int onHand(Item item){
+    			return onHand;
+    		}
+    	};
+        final InventoryManager im = new AceInventoryManager(db);
+        
+    	
+    	// when
+        final List<Order> actual = im.getOrders(today);
+    	
+    	// then
+        assertTrue(actual.isEmpty());
+              
+    }
 }

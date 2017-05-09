@@ -27,8 +27,11 @@ public final class AceInventoryManager implements InventoryManager {
     		 int needed = item.needed();
     		 int onHand = database.onHand(item);
     		 int quantity = needed - onHand;
-    		 Order order = new Order(item, quantity);
-    		 orders.add(order);
+    		 if (quantity > 0){
+        		 Order order = new Order(item, quantity);
+        		 orders.add(order);
+    		 }
+
     		 
     	 }
     	 
