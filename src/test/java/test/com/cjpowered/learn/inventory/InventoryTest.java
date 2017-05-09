@@ -4,9 +4,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -84,21 +86,10 @@ public class InventoryTest {
     	final StockedItem item1 = new StockedItem(needItem1);
     	final StockedItem item2 = new StockedItem(needItem2);
     	final LocalDate today = LocalDate.now();
-    	final InventoryDatabase db = new DatabaseTemplate(){
-    		@Override
-    		public List<Item> stockItems() {
-    			// TODO Auto-generated method stub
-    		return Arrays.asList(item1, item2);
-    		}
-    		@Override
-    		public int onHand(Item item){
-    			if (item.equals(item1))
-    				return onHandItem1;
-    			if (item.equals(item2))
-    				return onHandItem2;
-    			return -99;
-    		}
-    	};
+    	final HashMap<Item, Integer> fakeData = new HashMap<>();
+    	fakeData.put(item1, onHandItem1);
+    	fakeData.put(item2, onHandItem2);
+    	final InventoryDatabase db = new FakeDatabase(fakeData);
         final InventoryManager im = new AceInventoryManager(db);
 
     	
@@ -106,8 +97,9 @@ public class InventoryTest {
     	final List<Order> actual = im.getOrders(today);
     	
     	// then
-    	assertEquals(2, actual.size());
-    	assertEquals(new Order(item1, needItem1 - onHandItem1), actual.get(0));
-    	assertEquals(new Order(item2, needItem2 - onHandItem2), actual.get(0));
+    	Set<Order> expected = new HashSet<>();
+    	expected.add(new Order(item1, needItem1 - onHandItem1));
+    	expected.add(new Order(item2, needItem2 - onHandItem2));
+    	assertEquals(expected, new HashSet<>(actual));
     }
 }
