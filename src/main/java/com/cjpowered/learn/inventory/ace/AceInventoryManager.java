@@ -2,7 +2,6 @@ package com.cjpowered.learn.inventory.ace;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import com.cjpowered.learn.inventory.InventoryDatabase;
@@ -25,7 +24,10 @@ public final class AceInventoryManager implements InventoryManager {
     	 
     	 final List<Order> orders = new ArrayList<>();
     	 for(Item item : items) {
-    		 Order order = new Order(item, 5);
+    		 int needed = item.needed();
+    		 int onHand = database.onHand(item);
+    		 int quantity = needed - onHand;
+    		 Order order = new Order(item, quantity);
     		 orders.add(order);
     		 
     	 }
