@@ -47,68 +47,6 @@ public class InventoryTest {
     }
 
     @Test
-    public void orderEnoughItems()   {
-    	// given
-        final int onHand = 7;
-        final int need = 12;
-        final StockedItem item = new StockedItem(need);
-    	final LocalDate today = LocalDate.now();
-    	final InventoryDatabase db = new DatabaseTemplate(){
-    		@Override
-    		public List<Item> stockItems() {
-    			// TODO Auto-generated method stub
-    		return Collections.singletonList(item);
-    		}
-    		@Override
-    		public int onHand(Item item){
-    			return onHand;
-    		}
-    	};
-        final InventoryManager im = new AceInventoryManager(db);
-        
-    	
-    	// when
-        final List<Order> actual = im.getOrders(today);
-    	
-    	// then
-        assertEquals(1, actual.size());
-        assertEquals(item, actual.get(0).item);
-        assertEquals(need - onHand, actual.get(0).quantity);
-              
-    }
-    
-    @Test
-    public void orderEnoughItemsAgain()   {
-    	// given
-        final int onHand = 18;
-        final int need = 29;
-        final StockedItem item = new StockedItem(need);
-    	final LocalDate today = LocalDate.now();
-    	final InventoryDatabase db = new DatabaseTemplate(){
-    		@Override
-    		public List<Item> stockItems() {
-    			// TODO Auto-generated method stub
-    		return Collections.singletonList(item);
-    		}
-    		@Override
-    		public int onHand(Item item){
-    			return onHand;
-    		}
-    	};
-        final InventoryManager im = new AceInventoryManager(db);
-        
-    	
-    	// when
-        final List<Order> actual = im.getOrders(today);
-    	
-    	// then
-        assertEquals(1, actual.size());
-        assertEquals(item, actual.get(0).item);
-        assertEquals(need - onHand, actual.get(0).quantity);
-              
-    }
-    
-    @Test
     public void whenOverstockedDoNotOrder()   {
     	// given
         final int onHand = 26;
