@@ -53,7 +53,8 @@ public class InventoryTest {
     	// given
         final int onHand = 26;
         final int need = 5;
-        final StockedItem item = new StockedItem(need);
+        final boolean isOnSale = false;
+        final StockedItem item = new StockedItem(need, isOnSale);
     	final LocalDate today = LocalDate.now();
     	final InventoryDatabase db = new DatabaseTemplate(){
     		@Override
@@ -81,10 +82,12 @@ public class InventoryTest {
     	// given
     	final int onHandItem1 = 10;
     	final int needItem1 = 20;
+    	final boolean isOnSaleItem1 = false;
     	final int onHandItem2 = 7;
     	final int needItem2 = 83;
-    	final StockedItem item1 = new StockedItem(needItem1);
-    	final StockedItem item2 = new StockedItem(needItem2);
+    	final boolean isOnSaleItem2 = false;
+    	final StockedItem item1 = new StockedItem(needItem1, isOnSaleItem1);
+    	final StockedItem item2 = new StockedItem(needItem2, isOnSaleItem2);
     	final LocalDate today = LocalDate.now();
     	final HashMap<Item, Integer> fakeData = new HashMap<>();
     	fakeData.put(item1, onHandItem1);
@@ -101,5 +104,32 @@ public class InventoryTest {
     	expected.add(new Order(item1, needItem1 - onHandItem1));
     	expected.add(new Order(item2, needItem2 - onHandItem2));
     	assertEquals(expected, new HashSet<>(actual));
+    }
+    @Test
+    public void orderExtraWhenOnSale(){
+    	//given
+    	final int onHandItem1 = 10;
+    	final int needItem1 = 20;
+    	final boolean isOnSaleItem1 = true;
+    	final int onHandItem2 = 7;
+    	final int needItem2 = 83;
+    	final boolean isOnSaleItem2 = false;
+    	final StockedItem item1 = new StockedItem(needItem1, isOnSaleItem1);
+    	final StockedItem item2 = new StockedItem(needItem2, isOnSaleItem2);
+    	final LocalDate today = LocalDate.now();
+    	final HashMap<Item, Integer> fakeData = new HashMap<>();
+    	fakeData.put(item1, onHandItem1);
+    	fakeData.put(item2, onHandItem2);
+    	final InventoryDatabase db = new FakeDatabase(fakeData);
+        final InventoryManager im = new AceInventoryManager(db);
+    	
+    	//when
+        final List<Order> actual = im.getOrders(today);
+    	
+    	//then
+        Set<Order> expected = new HashSet<>();
+        expected.add(new Order(item1, (needItem1 + 20) - onHandItem1));
+        expected.add(new Order(item2, needItem2 - onHandItem2));
+        assertEquals(expected, new HashSet<>(actual));
     }
 }

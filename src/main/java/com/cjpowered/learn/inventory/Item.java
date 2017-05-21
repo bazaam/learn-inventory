@@ -1,5 +1,6 @@
 package com.cjpowered.learn.inventory;
 
 public interface Item {
-	int needed();	
+	int needed();
+	boolean isOnSale();
 }
